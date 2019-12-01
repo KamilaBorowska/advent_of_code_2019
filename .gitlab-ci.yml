@@ -1,0 +1,5 @@
+image: elixir:latest
+
+mix:
+  script:
+    - mix test
