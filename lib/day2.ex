@@ -21,18 +21,18 @@ defmodule AdventOfCode2019.Day2 do
 
   ## Examples
 
-      iex> File.read!("inputs/day2.txt") |> AdventOfCode2019.Day2.part2(19_690_720)
+      iex> File.read!("inputs/day2.txt") |> AdventOfCode2019.Day2.part2
       4847
 
   """
-  def part2(input, search) do
+  def part2(input) do
     mem = prog_mem(input)
 
     {noun, verb, _} =
       for noun <- 0..99, verb <- 0..99 do
         {noun, verb, interpreter(mem, noun, verb)}
       end
-      |> Enum.find(fn {_, _, value} -> value == search end)
+      |> Enum.find(fn {_, _, value} -> value == 1969_07_20 end)
 
     noun * 100 + verb
   end
