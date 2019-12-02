@@ -63,8 +63,8 @@ defmodule AdventOfCode2019.Day2 do
     end
 
     case opcode do
-      1 -> modify.(&(&1 + &2))
-      2 -> modify.(&(&1 * &2))
+      1 -> modify.(&+/2)
+      2 -> modify.(&*/2)
       99 -> mem
     end
   end
