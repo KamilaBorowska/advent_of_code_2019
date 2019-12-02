@@ -54,7 +54,7 @@ defmodule AdventOfCode2019.Day2 do
   end
 
   defp run_interpreter(mem, pos) do
-    {opcode, a_ptr, b_ptr, dest} = extract_params(mem, pos)
+    [opcode, a_ptr, b_ptr, dest] = extract_params(mem, pos)
 
     modify = fn f ->
       a = :array.get(a_ptr, mem)
@@ -70,7 +70,7 @@ defmodule AdventOfCode2019.Day2 do
   end
 
   defp extract_params(mem, pos) do
-    0..3 |> Enum.map(&:array.get(pos + &1, mem)) |> List.to_tuple()
+    0..3 |> Enum.map(&:array.get(pos + &1, mem))
   end
 
   defp first_elem(mem) do
