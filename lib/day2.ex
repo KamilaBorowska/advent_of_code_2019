@@ -13,12 +13,7 @@ defmodule AdventOfCode2019.Day2 do
 
   """
   def part1(input) do
-    input
-    |> String.trim()
-    |> String.split(",")
-    |> Enum.map(&String.to_integer/1)
-    |> :array.from_list()
-    |> interpreter(12, 2)
+    input |> prog_mem() |> interpreter(12, 2)
   end
 
   @doc """
@@ -31,12 +26,7 @@ defmodule AdventOfCode2019.Day2 do
 
   """
   def part2(input, search) do
-    mem =
-      input
-      |> String.trim()
-      |> String.split(",")
-      |> Enum.map(&String.to_integer/1)
-      |> :array.from_list()
+    mem = prog_mem(input)
 
     {noun, verb, _} =
       for noun <- 0..99, verb <- 0..99 do
@@ -45,6 +35,14 @@ defmodule AdventOfCode2019.Day2 do
       |> Enum.find(fn {_, _, value} -> value == search end)
 
     noun * 100 + verb
+  end
+
+  defp prog_mem(input) do
+    input
+    |> String.trim()
+    |> String.split(",")
+    |> Enum.map(&String.to_integer/1)
+    |> :array.from_list()
   end
 
   defp interpreter(mem, noun, verb) do
