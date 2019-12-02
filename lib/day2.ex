@@ -55,13 +55,16 @@ defmodule AdventOfCode2019.Day2 do
 
   defp run_interpreter(mem, pos) do
     {opcode, a_ptr, b_ptr, dest} = extract_params(mem, pos)
-    a = fn -> :array.get(a_ptr, mem) end
-    b = fn -> :array.get(b_ptr, mem) end
-    next_opcode = pos + 4
+
+    modify = fn f ->
+      a = :array.get(a_ptr, mem)
+      b = :array.get(b_ptr, mem)
+      run_interpreter(:array.set(dest, f.(a, b), mem), pos + 4)
+    end
 
     case opcode do
-      1 -> run_interpreter(:array.set(dest, a.() + b.(), mem), next_opcode)
-      2 -> run_interpreter(:array.set(dest, a.() * b.(), mem), next_opcode)
+      1 -> modify.(&(&1 + &2))
+      2 -> modify.(&(&1 * &2))
       99 -> mem
     end
   end
