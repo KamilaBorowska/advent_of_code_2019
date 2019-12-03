@@ -32,7 +32,7 @@ defmodule AdventOfCode2019.Day2 do
       for noun <- 0..99, verb <- 0..99 do
         {noun, verb, interpreter(mem, noun, verb)}
       end
-      |> Enum.find(fn {_, _, value} -> value == 1969_07_20 end)
+      |> Enum.find(fn {_, _, value} -> value == 19_690_720 end)
 
     noun * 100 + verb
   end
