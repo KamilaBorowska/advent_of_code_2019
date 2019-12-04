@@ -44,7 +44,7 @@ defmodule AdventOfCode2019.Day4 do
 
   defp incrementing?(chunks), do: Enum.all?(chunks, fn [a, b] -> a <= b end)
 
-  def strictly_two_adjacent_digits?(codepoints) do
+  defp strictly_two_adjacent_digits?(codepoints) do
     Enum.chunk_every([:ignore | codepoints], 4, 1)
     |> Enum.any?(fn [a, b, c | d] -> a != b && b == c && [c] != d end)
   end
