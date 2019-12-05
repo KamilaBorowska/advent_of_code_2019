@@ -14,9 +14,7 @@ defmodule AdventOfCode2019.Day5 do
       9775037
 
   """
-  def part1(program) do
-    run_with_input(program, 1)
-  end
+  def part1(program), do: run_with_input(program, 1)
 
   @doc """
   Solves the second riddle of day 5.
@@ -29,9 +27,7 @@ defmodule AdventOfCode2019.Day5 do
       15586959
 
   """
-  def part2(program) do
-    run_with_input(program, 5)
-  end
+  def part2(program), do: run_with_input(program, 5)
 
   defp run_with_input(program, input) do
     [out] =
@@ -49,9 +45,7 @@ defmodule AdventOfCode2019.Day5 do
     |> :array.from_list()
   end
 
-  defp run(cpu) do
-    fetch_opcode(cpu) |> run_opcode()
-  end
+  defp run(cpu), do: fetch_opcode(cpu) |> run_opcode()
 
   defp fetch_opcode(cpu) do
     {cpu, value} = fetch_pc(cpu)
@@ -85,9 +79,7 @@ defmodule AdventOfCode2019.Day5 do
     end
   end
 
-  defp modify_bool(f) do
-    modify(&if f.(&1, &2), do: 1, else: 0)
-  end
+  defp modify_bool(f), do: modify(&if f.(&1, &2), do: 1, else: 0)
 
   defp take_input(cpu, flags) do
     [input | rest] = cpu.inputs
@@ -112,13 +104,13 @@ defmodule AdventOfCode2019.Day5 do
     {cpu, value} = fetch_pc(cpu)
     {rest, flag} = divrem(flags, 10)
 
-    mem =
+    value =
       case flag do
         0 -> :array.get(value, cpu.mem)
         1 -> value
       end
 
-    {cpu, mem, rest}
+    {cpu, value, rest}
   end
 
   defp store(cpu, value, flags) do
