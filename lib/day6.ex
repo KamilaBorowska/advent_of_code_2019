@@ -38,9 +38,7 @@ defmodule AdventOfCode2019.Day6 do
     String.trim(input) |> String.split("\n") |> Enum.map(&String.split(&1, ")"))
   end
 
-  defp add_key([a, b], map) do
-    Map.update(map, a, [b], &[b | &1])
-  end
+  defp add_key([a, b], map), do: Map.update(map, a, [b], &[b | &1])
 
   defp compute_checksum(map, key, res) do
     Map.get(map, key, [])
