@@ -31,13 +31,7 @@ defmodule AdventOfCode2019.Day6 do
 
   """
   def part2(input) do
-    [depth] =
-      parse_map(input)
-      |> Enum.reduce(%{}, &add_graph_key/2)
-      |> graph_search(-1, MapSet.new(), "YOU")
-      |> Enum.take(1)
-
-    depth
+    parse_map(input) |> Enum.reduce(%{}, &add_graph_key/2) |> graph_search("YOU", "SAN")
   end
 
   defp parse_map(input) do
@@ -48,11 +42,6 @@ defmodule AdventOfCode2019.Day6 do
     Map.update(map, a, [b], &[b | &1])
   end
 
-  defp add_graph_key([a, b], map) do
-    map = Map.update(map, a, [b], &[b | &1])
-    Map.update(map, b, [a], &[a | &1])
-  end
-
   defp compute_checksum(map, key, res) do
     Map.get(map, key, [])
     |> Enum.map(&compute_checksum(map, &1, res + 1))
@@ -60,14 +49,25 @@ defmodule AdventOfCode2019.Day6 do
     |> Kernel.+(res)
   end
 
-  defp graph_search(map, depth, visited, current_point) do
-    visited = MapSet.put(visited, current_point)
-    candidates = Map.get(map, current_point, []) |> Enum.filter(&(!MapSet.member?(visited, &1)))
+  defp add_graph_key([a, b], map) do
+    map = Map.update(map, a, [b], &[b | &1])
+    Map.update(map, b, [a], &[a | &1])
+  end
+
+  defp graph_search(map, start_point, end_point) do
+    graph_search(map, :queue.from_list([{start_point, -1}]), MapSet.new([start_point]), end_point)
+  end
+
+  defp graph_search(map, queue, seen, end_point) do
+    {{:value, {current_point, depth}}, queue} = :queue.out(queue)
+    candidates = Map.get(map, current_point, []) |> Enum.filter(&(!MapSet.member?(seen, &1)))
+    queue = Enum.reduce(candidates, queue, &:queue.in({&1, depth + 1}, &2))
+    seen = Enum.reduce(candidates, seen, &MapSet.put(&2, &1))
 
     if Enum.any?(candidates, &(&1 == "SAN")) do
-      [depth]
+      depth
     else
-      Stream.flat_map(candidates, &graph_search(map, depth + 1, visited, &1))
+      graph_search(map, queue, seen, end_point)
     end
   end
 end
