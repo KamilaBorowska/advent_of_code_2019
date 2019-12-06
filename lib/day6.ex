@@ -64,7 +64,7 @@ defmodule AdventOfCode2019.Day6 do
     queue = Enum.reduce(candidates, queue, &:queue.in({&1, depth + 1}, &2))
     seen = Enum.reduce(candidates, seen, &MapSet.put(&2, &1))
 
-    if Enum.any?(candidates, &(&1 == "SAN")) do
+    if Enum.any?(candidates, &(&1 == end_point)) do
       depth
     else
       graph_search(map, queue, seen, end_point)
