@@ -49,10 +49,7 @@ defmodule AdventOfCode2019.Day6 do
     |> Kernel.+(res)
   end
 
-  defp add_graph_key([a, b], map) do
-    map = Map.update(map, a, [b], &[b | &1])
-    Map.update(map, b, [a], &[a | &1])
-  end
+  defp add_graph_key([a, b], map), do: add_key([b, a], add_key([a, b], map))
 
   defp graph_search(map, start_point, end_point) do
     graph_search(map, :queue.from_list([{start_point, -1}]), MapSet.new([start_point]), end_point)
