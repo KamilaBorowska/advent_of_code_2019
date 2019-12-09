@@ -4,10 +4,10 @@ defmodule AdventOfCode2019.IntCode do
     |> String.trim()
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
-    |> :array.from_list()
+    |> :array.from_list(0)
   end
 
-  def run(mem), do: run_cpu(%{mem: mem, pc: 0, outputs: []})
+  def run(mem), do: run_cpu(%{mem: mem, pc: 0, outputs: [], base: 0})
 
   def run(mem, inputs) do
     {:end, outputs} =
@@ -42,6 +42,7 @@ defmodule AdventOfCode2019.IntCode do
         6 -> jump_if(&(&1 == 0))
         7 -> modify_bool(&</2)
         8 -> modify_bool(&==/2)
+        9 -> &modify_base/2
         99 -> fn cpu, 0 -> {:end, cpu.outputs} end
       end
 
@@ -80,6 +81,11 @@ defmodule AdventOfCode2019.IntCode do
     end
   end
 
+  defp modify_base(cpu, flags) do
+    {cpu, value, 0} = load(cpu, flags)
+    run_cpu(%{cpu | base: cpu.base + value})
+  end
+
   defp load(cpu, flags) do
     {cpu, value} = fetch_pc(cpu)
     {rest, flag} = divrem(flags, 10)
@@ -88,6 +94,7 @@ defmodule AdventOfCode2019.IntCode do
       case flag do
         0 -> :array.get(value, cpu.mem)
         1 -> value
+        2 -> :array.get(value + cpu.base, cpu.mem)
       end
 
     {cpu, value, rest}
@@ -95,8 +102,15 @@ defmodule AdventOfCode2019.IntCode do
 
   defp store(cpu, value, flags) do
     {cpu, address} = fetch_pc(cpu)
-    {rest, 0} = divrem(flags, 10)
-    {%{cpu | mem: :array.set(address, value, cpu.mem)}, rest}
+    {rest, flag} = divrem(flags, 10)
+
+    mem =
+      case flag do
+        0 -> :array.set(address, value, cpu.mem)
+        2 -> :array.set(address + cpu.base, value, cpu.mem)
+      end
+
+    {%{cpu | mem: mem}, rest}
   end
 
   defp fetch_pc(cpu), do: {%{cpu | pc: cpu.pc + 1}, :array.get(cpu.pc, cpu.mem)}
