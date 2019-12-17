@@ -44,9 +44,7 @@ defmodule AdventOfCode2019.Day17 do
       'A,B,A,B,C,A,B,C,A,C\nR,6,L,6,L,10\nL,8,L,6,L,10,L,6\nR,6,L,8,L,10,R,6\nn\n'
       |> Enum.reduce(
         AdventOfCode2019.IntCode.run(:array.set(0, 2, AdventOfCode2019.IntCode.parse(input))),
-        fn byte, {:input, _, continue} ->
-          continue.(byte)
-        end
+        fn byte, {{:input, continue}, _} -> continue.(byte) end
       )
 
     List.last(out)

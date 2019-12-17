@@ -45,14 +45,14 @@ defmodule AdventOfCode2019.Day11 do
   end
 
   defp start(program, arg) do
-    {:input, [], continue} =
+    {{:input, continue}, []} =
       AdventOfCode2019.IntCode.parse(program)
       |> AdventOfCode2019.IntCode.run()
 
     continue.(arg)
   end
 
-  defp paint({:input, [color, direction], continue}, env) do
+  defp paint({{:input, continue}, [color, direction]}, env) do
     floor = paint_floor(env, color)
     new_dir = {dx, dy} = rotate(env.direction, direction)
     {x, y} = env.position

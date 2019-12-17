@@ -42,8 +42,8 @@ defmodule AdventOfCode2019.Day7 do
     permutations([5, 6, 7, 8, 9])
     |> Enum.map(fn permutation ->
       Enum.map(permutation, fn initial ->
-        {:input, [], continue} = AdventOfCode2019.IntCode.run(parsed)
-        {:input, [], continue} = continue.(initial)
+        {{:input, continue}, []} = AdventOfCode2019.IntCode.run(parsed)
+        {{:input, continue}, []} = continue.(initial)
         continue
       end)
       |> amplify_forever(0)
@@ -66,9 +66,11 @@ defmodule AdventOfCode2019.Day7 do
   defp amplify_forever(amplifiers, strength) do
     {list, status} =
       Enum.map_reduce(amplifiers, {:running, strength}, fn continue, {_, strength} ->
-        case continue.(strength) do
-          {:input, [out], continue} -> {continue, {:running, out}}
-          {:end, [out]} -> {:unreachable, {:ending, out}}
+        {continue_state, [out]} = continue.(strength)
+
+        case continue_state do
+          {:input, continue} -> {continue, {:running, out}}
+          :end -> {:unreachable, {:ending, out}}
         end
       end)
 

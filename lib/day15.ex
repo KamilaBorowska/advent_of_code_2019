@@ -13,7 +13,7 @@ defmodule AdventOfCode2019.Day15 do
 
   """
   def part1(program) do
-    {:input, [], continue} =
+    {{:input, continue}, []} =
       AdventOfCode2019.IntCode.parse(program) |> AdventOfCode2019.IntCode.run()
 
     {steps, _} = search(continue)
@@ -30,7 +30,7 @@ defmodule AdventOfCode2019.Day15 do
 
   """
   def part2(program) do
-    {:input, [], continue} =
+    {{:input, continue}, []} =
       AdventOfCode2019.IntCode.parse(program) |> AdventOfCode2019.IntCode.run()
 
     {_, continue} = search(continue)
@@ -63,7 +63,7 @@ defmodule AdventOfCode2019.Day15 do
         Enum.reduce_while(1..4, {:move, steps, queue, set}, fn input,
                                                                unmodified = {:move, _, queue, set} ->
           new_position = move_position(position, input)
-          {:input, [droid_state], continue} = continue.(input)
+          {{:input, continue}, [droid_state]} = continue.(input)
 
           if MapSet.member?(set, new_position) do
             {:cont, unmodified}

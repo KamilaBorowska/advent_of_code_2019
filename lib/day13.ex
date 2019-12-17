@@ -35,7 +35,7 @@ defmodule AdventOfCode2019.Day13 do
     |> run_step(%{})
   end
 
-  defp run_step({:input, output, continue}, map) do
+  defp run_step({{:input, continue}, output}, map) do
     new_map = render(output, map)
     {{paddle_x, _}, _} = new_map |> Enum.find(fn {_, v} -> v == 3 end)
     # The ball can disappear, just put some arbitrary values and hope for the best

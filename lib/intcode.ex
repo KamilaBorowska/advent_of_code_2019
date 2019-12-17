@@ -15,7 +15,7 @@ defmodule AdventOfCode2019.IntCode do
         inputs,
         run(mem),
         fn input, out ->
-          {:input, [], continue} = out
+          {{:input, continue}, []} = out
           continue.(input)
         end
       )
@@ -61,11 +61,11 @@ defmodule AdventOfCode2019.IntCode do
   defp modify_bool(f), do: modify(&if f.(&1, &2), do: 1, else: 0)
 
   defp take_input(cpu, flags) do
-    {:input, Enum.reverse(cpu.outputs),
-     fn input ->
-       {cpu, 0} = store(cpu, input, flags)
-       run_cpu(%{cpu | outputs: []})
-     end}
+    {{:input,
+      fn input ->
+        {cpu, 0} = store(cpu, input, flags)
+        run_cpu(%{cpu | outputs: []})
+      end}, Enum.reverse(cpu.outputs)}
   end
 
   defp store_output(cpu, flags) do
