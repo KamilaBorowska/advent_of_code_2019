@@ -1,6 +1,6 @@
 defmodule AdventOfCode2019.Day17 do
   @moduledoc """
-  Day 16 solutions
+  Day 17 solutions
   """
 
   @doc """
