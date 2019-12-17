@@ -52,7 +52,7 @@ defmodule AdventOfCode2019.Day11 do
     continue.(arg)
   end
 
-  defp paint({:input, [direction, color], continue}, env) do
+  defp paint({:input, [color, direction], continue}, env) do
     floor = paint_floor(env, color)
     new_dir = {dx, dy} = rotate(env.direction, direction)
     {x, y} = env.position
@@ -65,7 +65,7 @@ defmodule AdventOfCode2019.Day11 do
     })
   end
 
-  defp paint({:end, [_, color]}, env), do: paint_floor(env, color)
+  defp paint({:end, [color, _]}, env), do: paint_floor(env, color)
 
   defp paint_floor(env, color), do: Map.put(env.floor, env.position, color)
 

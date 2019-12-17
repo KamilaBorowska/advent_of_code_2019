@@ -37,19 +37,17 @@ defmodule AdventOfCode2019.Day13 do
 
   defp run_step({:input, output, continue}, map) do
     new_map = render(output, map)
-    {{_, paddle_x}, _} = new_map |> Enum.find(fn {_, v} -> v == 3 end)
+    {{paddle_x, _}, _} = new_map |> Enum.find(fn {_, v} -> v == 3 end)
     # The ball can disappear, just put some arbitrary values and hope for the best
-    {{_, ball_x}, _} = new_map |> Enum.find({{nil, 0}, nil}, fn {_, v} -> v == 4 end)
+    {{ball_x, _}, _} = new_map |> Enum.find({{0, nil}, nil}, fn {_, v} -> v == 4 end)
     sign(ball_x, paddle_x) |> continue.() |> run_step(new_map)
   end
 
-  defp run_step({:end, output}, map) do
-    render(output, map)[{0, -1}]
-  end
+  defp run_step({:end, output}, map), do: render(output, map)[{-1, 0}]
 
   defp render(output, map) do
     Enum.chunk_every(output, 3)
-    |> Enum.reduce(map, fn [tile, x, y], map -> Map.put(map, {x, y}, tile) end)
+    |> Enum.reduce(map, fn [x, y, tile], map -> Map.put(map, {x, y}, tile) end)
   end
 
   defp sign(a, b) do

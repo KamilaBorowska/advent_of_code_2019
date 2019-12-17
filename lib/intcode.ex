@@ -43,7 +43,7 @@ defmodule AdventOfCode2019.IntCode do
         7 -> modify_bool(&</2)
         8 -> modify_bool(&==/2)
         9 -> &modify_base/2
-        99 -> fn cpu, 0 -> {:end, cpu.outputs} end
+        99 -> fn cpu, 0 -> {:end, Enum.reverse(cpu.outputs)} end
       end
 
     operation.(cpu, flags)
@@ -61,7 +61,7 @@ defmodule AdventOfCode2019.IntCode do
   defp modify_bool(f), do: modify(&if f.(&1, &2), do: 1, else: 0)
 
   defp take_input(cpu, flags) do
-    {:input, cpu.outputs,
+    {:input, Enum.reverse(cpu.outputs),
      fn input ->
        {cpu, 0} = store(cpu, input, flags)
        run_cpu(%{cpu | outputs: []})
